@@ -2,26 +2,27 @@
 #gap represent particular column and _ represent row number in page
 from PIL import Image
 from fpdf import FPDF
+import cv2
 img=Image.open("E:\\txttohandwritting-master\\file\\bg.png")
 sizeOfSheet=img.width
 gap,_=50,0
 allowedchar='qwertyuiopasdfghjklzxcvbnm(),.?;1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 #default_path_to_read="E:\\txttohandwritting-master\\file\\"
 def Write(char):
+   
     if char=='\n':
         pass
     else:
         global gap,_
-        char.lower()
+        char=char.lower()
+        print("char ",char)
         try:
             cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
-            cv2.imshow(",,,",cases)
-            #cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
+            cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
         except Exception as ex:
             cases=char
     
         img.paste(cases,(gap,_))
-    
         size=cases.width
         gap+=size
         del cases
