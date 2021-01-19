@@ -9,13 +9,11 @@ gap,_=50,0
 allowedchar='qwertyuiopasdfghjklzxcvbnm(),.?;1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 #default_path_to_read="E:\\txttohandwritting-master\\file\\"
 def Write(char):
-   
     if char=='\n':
         pass
     else:
         global gap,_
         char=char.lower()
-        print("char ",char)
         try:
             cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
             cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)

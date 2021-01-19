@@ -6,7 +6,6 @@ from converter.functions import *
 from converter.form import Uploadform  
 import converter.txttohand
 import converter.input
-
 from . import txttohand
 def index(request):  
     print(len(request.FILES))
@@ -16,7 +15,11 @@ def index(request):
             path=handle_uploaded_file(request.FILES['file']) #its for upload file in data base
             #path=os.path.join("converter/static/upload",folder,f.name)
             #path_to_pdf=converter.txttohand.convert_to_pdf(path,request.FILES['file'].name,"E:\\txttohandwritting-master\\file\\") #for convertion of file in to handwriting
-            path_to_pdf=converter.txttohand.convert_to_pdf(path,request.FILES['file'].name)
+            nameof_file=request.FILES['file'].name
+            filename=nameof_file.split('.')[0]
+            path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
+
+            
             return render(request,"download.html",{'path_to_pdf':path_to_pdf})  
     else:  
         uploaded_form = Uploadform()  
