@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form action="{% url 'download_file' %}">
+  {% csrf_token %}
+   <button type="submit" name="pdf_to_download" value={{path_to_pdf}}>Download results in pdf</button>
+  </form>
+{% endblock content %}

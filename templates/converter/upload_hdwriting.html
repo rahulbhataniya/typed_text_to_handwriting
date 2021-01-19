@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form action="{% url 'train_upload' %}" method="POST" class="post-form" enctype="multipart/form-data">
+  {% csrf_token %}
+    <script type="text/javascript">
+        function ShowHideDiv(chkPassport) 
+        {
+            var dvPassport = document.getElementById("upload");
+            dvPassport.style.display = chkPassport.checked ? "block" : "none";
+        }
+    </script>
+    <label for="You want to upload  your own handwritting ?">
+        <input type="checkbox" id="chkPassport" onclick="ShowHideDiv(this)" />
+        You want to upload  your own handwritting ?
+    </label>
+
+    <hr />
+
+    <div id="upload" style="display: none">
+        upload image of small later of Alphabets from a to n :   <input type="file" id="myfile1" name="small_file1"><br><br>
+        upload image of small later of Alphabets from o to z :   <input type="file" id="myfile2" name="small_file2"><br><br>
+        upload image of Capital later of Alphabets from A to M :   <input type="file" id="myfile3" name="capital_file1"><br><br>
+        upload image of Capital later of Alphabets from N to Z :   <input type="file" id="myfile4" name="capital_file2"><br><br>
+        upload image of digits from 0 to 9 : &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<input type="file" id="myfile5" name="digit_file"><br><br>
+        upload text file to convert into handwriting :   <input type="file" id="myfile4" name="text_file"><br><br>
+        <input type="submit"><br><br>
+    </div>
+
+   <!--button type="submit" name="pdf_to_download" value={{path_to_pdf}}>Download results in pdf</button-->
+  </form>
+  {% endblock content %}
