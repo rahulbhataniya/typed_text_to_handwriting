@@ -65,11 +65,12 @@ def Word(Input,i):
         
 def convert_to_pdf(path,file_name):
     name=file_name
+    print(name)
     print(path)
     path_to_blank="E:\\txttohandwritting-master\\file\\bg.png"
     try:
         with open(path,'r') as file:
-            data=file.read().replace('\n','')
+            data=file.read().replace('\\r',' ').strip()
             l=len(data)
             np=len(data)//600+1
             chunks,chunk_size=len(data),(len(data)//np+1)
