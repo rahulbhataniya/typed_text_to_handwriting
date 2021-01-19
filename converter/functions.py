@@ -1,7 +1,7 @@
 
 import os
 def write_to_file(f,folder):
-    path=os.path.join("converter/static/upload",folder,f.name)
+    path=os.path.join("converter\\static\\upload",folder,f.name)
     print('path== ',path)
     #path='converter/static/upload/'+f.name
     with open(path, 'wb+') as destination:  
@@ -10,7 +10,20 @@ def write_to_file(f,folder):
     return path
 
 def handle_uploaded_file(f):  
-    return write_to_file(f,'file_to_convert')
+    #print("....ye le bhai .........")
+    data_for_text=str(f.read())
+    data_for_text=data_for_text.replace('b\'',' ')    # this is for remove  binary simbole
+    data_for_text=data_for_text.replace('\'',' ')     #this is fro remove ' symbol
+
+    data_for_text=data_for_text.replace('\\n',' ')     #replace /n with space
+    #print(data_for_text.replace('\\r',' '))             #replace /r with space
+    
+    #print("...ho gaya .......")
+
+    path=os.path.join("converter\\static\\upload",'file_to_convert',f.name)
+    with open(path, 'w+') as destination:  
+            destination.write(data_for_text)  
+    return path
     
 def handle_uploaded_file2(files):
     list_files=[]
