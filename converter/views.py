@@ -7,6 +7,12 @@ from converter.form import Uploadform
 import converter.txttohand
 import converter.input
 from . import txttohand
+
+from django.shortcuts import render
+from .models import Image
+from .form import ImageForm
+
+
 def index(request):  
     print(len(request.FILES))
     if request.method == 'POST':  
@@ -18,8 +24,6 @@ def index(request):
             nameof_file=request.FILES['file'].name
             filename=nameof_file.split('.')[0]
             path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
-
-            
             return render(request,"download.html",{'path_to_pdf':path_to_pdf})  
     else:  
         uploaded_form = Uploadform()  
@@ -46,3 +50,20 @@ def train_upload(request):
         return render(request,"download.html",{'path_to_pdf':path_to_pdf})
     else:
         return render(request, 'upload_hdwriting.html')
+
+
+def showimage(request):
+    if request.method == 'POST':
+        current_form=ImageForm(request.POST,request.FILES)
+        if current_form.is_valid():
+            current_form.save()
+        lastimage= Image.objects.last()
+        print('...le bhai last image... = ')
+        print(lastimage)
+        imagefile= lastimage.imagefile
+        context={'imagefile':imagefile,'form':current_form}
+        return render(request,'image.html',context)
+    else:
+        current_form=ImageForm()
+        context={'form':current_form}
+        return render(request,'image.html',context)
