@@ -54,13 +54,21 @@ def train_upload(request):
 
 def showimage(request):
     if request.method == 'POST':
+        print("uploaded file name is")
+        #print(request.FILES['name'])
+        print(request.FILES)
+        name_of_person="tmep"
+        request.FILES['imagefile1'].name='0_9.jpg'
+        request.FILES['imagefile2'].name='a_n.jpg'
+        request.FILES['imagefile3'].name='m_z.jpg'
+        request.FILES['imagefile4'].name='A_N.jpg'
+        request.FILES['imagefile5'].name='M_Z.jpg'
+        request.FILES['imagefile6'].name='text.jpg'
         current_form=ImageForm(request.POST,request.FILES)
         if current_form.is_valid():
             current_form.save()
         lastimage= Image.objects.last()
-        print('...le bhai last image... = ')
-        print(lastimage)
-        imagefile= lastimage.imagefile
+        imagefile= lastimage.imagefile1
         context={'imagefile':imagefile,'form':current_form}
         return render(request,'image.html',context)
     else:

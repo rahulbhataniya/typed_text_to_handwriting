@@ -8,4 +8,4 @@ class Uploadform(forms.Form):
 class ImageForm(forms.ModelForm):
     class Meta:
         model= Image
-        fields= ["name", "imagefile"]
+        fields= ["name", "imagefile1","imagefile2","imagefile3","imagefile4","imagefile5","imagefile6"]
