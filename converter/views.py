@@ -29,12 +29,15 @@ def index(request):
             nameof_file=request.FILES['file'].name
             filename=nameof_file.split('.')[0]
             path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
-            return render(request,"download.html",{'path_to_pdf':path_to_pdf})  
+            print(path_to_pdf)
+            return render(request,"download.html",{'path_to_pdf':path_to_pdf}) 
+            #return render(request,"home.html") 
     else:  
         uploaded_form = Uploadform()  
         return render(request,"index.html",{'form':uploaded_form})
 
 def download_file(request):
+    print('..............ha agaya....')
     fl_path = request.GET['pdf_to_download']
     print('path to downlaodeble pdf in sidedownload function  : ',fl_path)
     filename = 'converted.pdf'
@@ -53,6 +56,7 @@ def train_upload(request):
         print( path_to_read)
         path_to_pdf=converter.txttohand.convert_to_pdf(list_of_6_path[5],request.FILES['text_file'].name) #for convertion of file in to handwriting
         return render(request,"download.html",{'path_to_pdf':path_to_pdf})
+        #return (request,"home.html")
     else:
         return render(request, 'upload_hdwriting.html')
 
@@ -81,8 +85,6 @@ def showimage(request):
         context={'form':current_form}
         return render(request,'image.html',context)
 
-
-
 def access_data(request):
     image_data= Image.objects.get(name=70)
     print("Myoutput",image_data)
@@ -102,7 +104,6 @@ def register(request):
             messages.success(request, f"New account created: {username}")
             login(request, user)
             return redirect("converter:homepage")
-
         else:
             for msg in form.error_messages:
                 messages.error(request, f"{msg}: {form.error_messages[msg]}")
