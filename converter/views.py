@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.core.files.storage import default_storage
 
 
 
@@ -51,6 +51,7 @@ def download_file(request):
     fl = open(fl_path,'rb')
     mime_type, _ = mimetypes.guess_type(fl_path)
     response = HttpResponse(fl, content_type=mime_type)
+    #default_storage.delete(fl_path)
     response['Content-Disposition'] = "attachment; filename=%s" % filename
     return response
 
