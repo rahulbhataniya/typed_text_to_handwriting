@@ -3,7 +3,7 @@
 from PIL import Image
 from fpdf import FPDF
 import cv2
-img=Image.open("E:\\txttohandwritting-master\\file\\bg.png")
+img=Image.open("converter\\static\\pre_train_data\\file\\bg.png")
 sizeOfSheet=img.width
 gap,_=50,0
 allowedchar='qwertyuiopasdfghjklzxcvbnm(),.?;1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -15,8 +15,8 @@ def Write(char):
         global gap,_
         char=char.lower()
         try:
-            cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
-            cases=Image.open("E:\\txttohandwritting-master\\file\\%s.png"%char)
+            cases=Image.open("converter\\static\\pre_train_data\\file\\%s.png"%char)
+            cases=Image.open("converter\\static\\pre_train_data\\file\\%s.png"%char)
         except Exception as ex:
             cases=char
     
@@ -66,7 +66,7 @@ def convert_to_pdf(path,file_name):
     name=file_name
     print(name)
     print(path)
-    path_to_blank="E:\\txttohandwritting-master\\file\\bg.png"
+    path_to_blank="converter\\static\\pre_train_data\\file\\bg.png"
     try:
         with open(path,'r') as file:
             data=file.read().replace('\\r',' ').strip()
@@ -78,7 +78,7 @@ def convert_to_pdf(path,file_name):
             for i in range(0,len(p)):
                 Word(p[i],i)
                 Write('\n')
-                path_to_save="E:\\txttohandwritting-master\out\\"+name+'_'+str(i)+".png"
+                path_to_save="media\\safe_for_convertion\\"+name+'_'+str(i)+".png"
                 global img
                 img.save(path_to_save)
                 img1=Image.open(path_to_blank)
@@ -90,12 +90,12 @@ def convert_to_pdf(path,file_name):
     imageList=[]
     img1_convert=Image.open(path_to_blank)
     for i in range(0,len(p)):
-        path="E:\\txttohandwritting-master\out\\"+name+"_"+str(i)
+        path="media\\safe_for_convertion\\"+name+"_"+str(i)
         img1=Image.open(path+".png")
         img1_convert=img1.convert('RGB')
         #img1_convert.save(path+".pdf")
         imageList.append(img1_convert)
-    path_to_pdf='E:\\txttohandwritting-master\out\\' +name+'.pdf'
+    path_to_pdf='media\\safe_for_convertion\\' +name+'.pdf'
     img1_convert.save(path_to_pdf,save_all=True,append_images=imageList)
     print('processing  for image conversion ...............')
     return path_to_pdf
