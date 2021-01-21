@@ -15,10 +15,17 @@ from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 
-def index(request):  
+
+def index(request):
+    print('............user name.........->')  
+    print(str(request.user))
+    print(User.username)
+
     print(len(request.FILES))
     if request.method == 'POST':  
         uploaded_form = Uploadform(request.POST, request.FILES)  
@@ -60,7 +67,7 @@ def train_upload(request):
     else:
         return render(request, 'upload_hdwriting.html')
 
-
+@login_required(login_url='login.html')
 def showimage(request):
     if request.method == 'POST':
         print("uploaded file name is")
@@ -75,7 +82,9 @@ def showimage(request):
         request.FILES['imagefile6'].name='text.jpg'
         current_form=ImageForm(request.POST,request.FILES)
         if current_form.is_valid():
-            current_form.save()
+            image_data=current_form.save(commit=False)
+            image_data.user_name=str(request.user)
+            image_data.save()
         lastimage= Image.objects.last()
         imagefile= lastimage.imagefile1
         context={'imagefile':imagefile,'form':current_form}
@@ -86,11 +95,9 @@ def showimage(request):
         return render(request,'image.html',context)
 
 def access_data(request):
-    image_data= Image.objects.get(name=70)
+    image_data= Image.objects.get(user_name=request.user)
     print("Myoutput",image_data)
     return render(request,'show_image.html',{'data': image_data})
-
-
 
 def homepage(request):
     return render(request = request,template_name='home.html')
