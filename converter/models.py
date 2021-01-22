@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Image(models.Model):
-    user_name=models.CharField(max_length=100)
+    user_name=models.CharField(max_length=100,primary_key=False, db_index=True, unique=True)
     imagefile1=models.FileField(upload_to="images/",null=True,verbose_name="")
     imagefile2=models.FileField(upload_to="images/",null=True,verbose_name="")
     imagefile3=models.FileField(upload_to="images/",null=True,verbose_name="")

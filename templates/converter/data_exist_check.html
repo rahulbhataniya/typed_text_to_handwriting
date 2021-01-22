@@ -1,0 +1,36 @@
+{% extends "home.html" %}
+
+{% block content %}
+
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
+    {% endfor %}
+    {% endif %}
+    <div>
+        <form method="POST" class="post-form" enctype="multipart/form-data">  
+            {% csrf_token %}
+            <div class="container"> 
+                <h5>convert to your handwriting</h5> 
+                    <div class="container">
+                                {{ form.as_p }}  
+                                <button type="submit" class="save btn btn-default">Upload</button>  
+                    </div>
+            </div>
+        </form> 
+    </div> 
+    <div>
+        <br>
+        <br>
+        <div class="container">
+            <h5>change your uploaded handwriting </h5><br>
+                <div class="container">
+                    <input class="btn btn-success" type="button" value="click here" onclick="location.href='{% url 'converter:showimage' %}'"  />
+                </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

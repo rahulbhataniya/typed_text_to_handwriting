@@ -21,6 +21,7 @@ from django.core.files.storage import default_storage
 
 
 
+
 def index(request):
     print('............user name.........->')  
     print(str(request.user))
@@ -42,6 +43,31 @@ def index(request):
     else:  
         uploaded_form = Uploadform()  
         return render(request,"index.html",{'form':uploaded_form})
+
+
+def user_index(request):
+    print('............user name.........->')  
+    print(str(request.user))
+    print(User.username)
+
+    print(len(request.FILES))
+    if request.method == 'POST':  
+        uploaded_form = Uploadform(request.POST, request.FILES)  
+        if uploaded_form.is_valid(): 
+            path=handle_uploaded_file(request.FILES['file']) #its for upload file in data base
+            #path=os.path.join("converter/static/upload",folder,f.name)
+            #path_to_pdf=converter.txttohand.convert_to_pdf(path,request.FILES['file'].name,"E:\\txttohandwritting-master\\file\\") #for convertion of file in to handwriting
+            nameof_file=request.FILES['file'].name
+            filename=nameof_file.split('.')[0]
+            path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
+            print(path_to_pdf)
+            return render(request,"download.html",{'path_to_pdf':path_to_pdf}) 
+            #return render(request,"home.html") 
+    else:  
+        uploaded_form = Uploadform()  
+        return render(request,"data_exist_check.html",{'form':uploaded_form})
+
+
 
 def download_file(request):
     print('..............ha agaya....')
@@ -68,10 +94,22 @@ def train_upload(request):
     else:
         return render(request, 'upload_hdwriting.html')
 
-@login_required(login_url='login.html')
+@login_required(login_url=("converter:login"))
+def check_data_exist(request):
+    obj, created = Image.objects.get_or_create(user_name=request.user)
+    if len(str(obj.imagefile1))!=0 and len(str(obj.imagefile2))!=0 and len(str(obj.imagefile3))!=0:
+        return redirect("converter:user_index")
+    else:
+        return redirect("converter:showimage")
+
+
+@login_required(login_url=("converter:login"))
 def showimage(request):
     if request.method == 'POST':
         print("uploaded file name is")
+        obj, created = Image.objects.get_or_create(user_name=request.user)
+        if created==False:
+            obj.delete()
         #print(request.FILES['name'])
         print(request.FILES)
         name_of_person="tmep"
@@ -88,13 +126,17 @@ def showimage(request):
             image_data.save()
         lastimage= Image.objects.last()
         imagefile= lastimage.imagefile1
-        context={'imagefile':imagefile,'form':current_form}
-        return render(request,'image.html',context)
+        #context={'imagefile':imagefile,'form':current_form}
+        #return render(request,'image.html',context)
+        return redirect("converter:user_index")
     else:
         current_form=ImageForm()
         context={'form':current_form}
         return render(request,'image.html',context)
 
+
+        
+@login_required(login_url=("converter:login"))
 def access_data(request):
     image_data= Image.objects.get(user_name=request.user)
     print("Myoutput",image_data)
@@ -152,3 +194,4 @@ def login_request(request):
     return render(request = request,
                     template_name = "login.html",
                     context={"form":form})
+

@@ -1,17 +1,20 @@
 {% extends "home.html" %}
 
 {% block content %}
-    <h4>Image Uploader</h4>
-    <form enctype="multipart/form-data" method="POST" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Upload"/>
-    </form>
 
-    <br><br>
-    <img src='{{ MEDIA_URL }}{{ imagefile }}'>
-    <br><br>
-    </p>
+    <div class="container">
+        <h4>Image Uploader</h4>
+        <form enctype="multipart/form-data" method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Upload"/>
+        </form>
+
+        <br><br>
+        <img src='{{ MEDIA_URL }}{{ imagefile }}'>
+        <br><br>
+        </p>
+    </div>
 
 {% endblock content %}
 
