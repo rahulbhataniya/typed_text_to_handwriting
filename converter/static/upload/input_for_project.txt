@@ -1,1 +1,1 @@
-The data type stores any kind of text data. it can contain both single-byte and multibyte characters that the locale supports. The term simple large object refers to an instance of a TEXT or BYTE data type.
+Hi am rahul ; ; ;The data type stores any kind of text data. it can contain both single-byte and multibyte characters that the locale supports. The term simple large object refers to an instance of a TEXT or BYTE data type.

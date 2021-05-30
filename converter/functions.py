@@ -10,28 +10,21 @@ def write_to_file(f,folder):
     return path
 
 def handle_uploaded_file(f):  
-    #print("....ye le bhai .........")
     data_for_text=str(f.read())
     data_for_text=data_for_text.replace('b\'',' ')    # this is for remove  binary simbole
     data_for_text=data_for_text.replace('\'',' ')     #this is fro remove ' symbol
-
     data_for_text=data_for_text.replace('\\n',' ')     #replace /n with space
-    #print(data_for_text.replace('\\r',' '))             #replace /r with space
-    
-    #print("...ho gaya .......")
-
     path=os.path.join("converter\\static\\upload",'file_to_convert',f.name)
     with open(path, 'w+') as destination:  
             destination.write(data_for_text)  
     return path
-    
 def handle_uploaded_file2(files):
     list_files=[]
+    list_files.append(files['digit_file'])
     list_files.append(files['small_file1'])
     list_files.append(files['small_file2'])
     list_files.append(files['capital_file1'])
     list_files.append(files['capital_file2'])
-    list_files.append(files['digit_file'])
     path_to_uploaded=[]
     for f in list_files:
         path_to_uploaded.append(write_to_file(f,'traine_model'))

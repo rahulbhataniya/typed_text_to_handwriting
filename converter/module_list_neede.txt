@@ -1,0 +1,8 @@
+Django
+reportlab
+fpdf
+cv2(pip install opencv-python)
+imutils
+skimage(pip install scikit-image)
+
+if error is generated related to DLL then install (pip install msvc-runtime)

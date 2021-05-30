@@ -1,3 +1,4 @@
+
 {% extends "home.html" %}
 
 {% block content %}
@@ -26,7 +27,7 @@
         <div class="container">
             <h5>change your uploaded handwriting </h5><br>
                 <div class="container">
-                    <input class="btn btn-success" type="button" value="click here" onclick="location.href='{% url 'converter:showimage' %}'"  />
+                    <input class="btn btn-success" type="button" value="click here" onclick="location.href='{% url 'converter:train_upload' %}'"  />
                 </div>
         </div>
     </div>

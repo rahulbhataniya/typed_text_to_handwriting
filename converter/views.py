@@ -1,3 +1,4 @@
+from django.forms.widgets import Media
 from django.shortcuts import render  
 import mimetypes
 from reportlab.pdfgen import canvas  
@@ -19,21 +20,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 
-
-
-
 def index(request):
-    print('............user name.........->')  
-    print(str(request.user))
-    print(User.username)
-
-    print(len(request.FILES))
-    if request.method == 'POST':  
+    if request.method == 'POST': 
+        print(str(request.user))
+        print(User.username,type(User.username))
+        print(len(request.FILES))
         uploaded_form = Uploadform(request.POST, request.FILES)  
         if uploaded_form.is_valid(): 
             path=handle_uploaded_file(request.FILES['file']) #its for upload file in data base
-            #path=os.path.join("converter/static/upload",folder,f.name)
-            #path_to_pdf=converter.txttohand.convert_to_pdf(path,request.FILES['file'].name,"E:\\txttohandwritting-master\\file\\") #for convertion of file in to handwriting
             nameof_file=request.FILES['file'].name
             filename=nameof_file.split('.')[0]
             path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
@@ -46,23 +40,25 @@ def index(request):
 
 
 def user_index(request):
-    print('............user name.........->')  
-    print(str(request.user))
-    print(User.username)
-
-    print(len(request.FILES))
     if request.method == 'POST':  
-        uploaded_form = Uploadform(request.POST, request.FILES)  
+        uploaded_form = Uploadform(request.POST, request.FILES) 
+        u_name=str(request.user)
+        request.FILES['file'].name=u_name
         if uploaded_form.is_valid(): 
-            path=handle_uploaded_file(request.FILES['file']) #its for upload file in data base
-            #path=os.path.join("converter/static/upload",folder,f.name)
-            #path_to_pdf=converter.txttohand.convert_to_pdf(path,request.FILES['file'].name,"E:\\txttohandwritting-master\\file\\") #for convertion of file in to handwriting
-            nameof_file=request.FILES['file'].name
-            filename=nameof_file.split('.')[0]
-            path_to_pdf=converter.txttohand.convert_to_pdf(path,filename)
+            path_to_uploaded_file=handle_uploaded_file(request.FILES['file']) #its for upload file in data base
+            filename=u_name
+            ob=Image.objects.get(user_name=request.user)
+            path_handwriting=[]
+            front_path='/text_to_hand/media/'
+            path_handwriting.append(front_path+str(ob.imagefile1))
+            path_handwriting.append(front_path+str(ob.imagefile2))
+            path_handwriting.append(front_path+str(ob.imagefile3))
+            path_handwriting.append(front_path+str(ob.imagefile4))
+            path_handwriting.append(front_path+str(ob.imagefile5))
+            path_to_read=converter.input.genrate_char(path_handwriting,u_name)
+            path_to_pdf=converter.txttohand.convert_to_pdf(path_to_uploaded_file,filename,path_to_read)
             print(path_to_pdf)
             return render(request,"download.html",{'path_to_pdf':path_to_pdf}) 
-            #return render(request,"home.html") 
     else:  
         uploaded_form = Uploadform()  
         return render(request,"data_exist_check.html",{'form':uploaded_form})
@@ -70,9 +66,7 @@ def user_index(request):
 
 
 def download_file(request):
-    print('..............ha agaya....')
     fl_path = request.GET['pdf_to_download']
-    print('path to downlaodeble pdf in sidedownload function  : ',fl_path)
     filename = 'converted.pdf'
     fl = open(fl_path,'rb')
     mime_type, _ = mimetypes.guess_type(fl_path)
@@ -81,53 +75,34 @@ def download_file(request):
     response['Content-Disposition'] = "attachment; filename=%s" % filename
     return response
 
-def train_upload(request):
-    print("insede more upload",len(request.FILES))
-    if request.method == 'POST':
-        print(type(request.FILES))
-        list_of_6_path=handle_uploaded_file2(request.FILES)
-        path_to_read=converter.input.genrate_char(list_of_6_path[:5])
-        print( path_to_read)
-        path_to_pdf=converter.txttohand.convert_to_pdf(list_of_6_path[5],request.FILES['text_file'].name) #for convertion of file in to handwriting
-        return render(request,"download.html",{'path_to_pdf':path_to_pdf})
-        #return (request,"home.html")
-    else:
-        return render(request, 'upload_hdwriting.html')
-
 @login_required(login_url=("converter:login"))
 def check_data_exist(request):
     obj, created = Image.objects.get_or_create(user_name=request.user)
     if len(str(obj.imagefile1))!=0 and len(str(obj.imagefile2))!=0 and len(str(obj.imagefile3))!=0:
         return redirect("converter:user_index")
     else:
-        return redirect("converter:showimage")
-
+        return redirect("converter:train_upload")
 
 @login_required(login_url=("converter:login"))
-def showimage(request):
+def train_upload(request):
     if request.method == 'POST':
         print("uploaded file name is")
         obj, created = Image.objects.get_or_create(user_name=request.user)
         if created==False:
             obj.delete()
-        #print(request.FILES['name'])
-        print(request.FILES)
-        name_of_person="tmep"
+        name_of_person="temp"
         request.FILES['imagefile1'].name='0_9.jpg'
         request.FILES['imagefile2'].name='a_n.jpg'
-        request.FILES['imagefile3'].name='m_z.jpg'
-        request.FILES['imagefile4'].name='A_N.jpg'
-        request.FILES['imagefile5'].name='M_Z.jpg'
-        request.FILES['imagefile6'].name='text.jpg'
+        request.FILES['imagefile3'].name='o_z.jpg'
+        request.FILES['imagefile4'].name='A_M.jpg'
+        request.FILES['imagefile5'].name='N_Z.jpg'
         current_form=ImageForm(request.POST,request.FILES)
         if current_form.is_valid():
             image_data=current_form.save(commit=False)
             image_data.user_name=str(request.user)
             image_data.save()
-        lastimage= Image.objects.last()
-        imagefile= lastimage.imagefile1
-        #context={'imagefile':imagefile,'form':current_form}
-        #return render(request,'image.html',context)
+        img_list=Image.objects.get(user_name=request.user)
+        #print(img_list.imagefile1) this return path of images
         return redirect("converter:user_index")
     else:
         current_form=ImageForm()

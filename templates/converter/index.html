@@ -1,34 +1,38 @@
 {% extends "home.html" %}
-
 {% block content %}
 <div class="container">
-        {% if messages %}
-        {% for message in messages %}
-        <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
-        {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <script>M.toast({ html: "{{message}}", classes: 'blue rounded', displayLength: 2000 });</script>
+    {% endfor %}
+    {% endif %}
+    <section style="margin: 40px ;background-color: antiquewhite; background-size:contain;padding: 20px;">
         <div>
-            <form method="POST" class="post-form" enctype="multipart/form-data">  
+            <form method="POST" class="post-form" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="container"> 
-                    <h5>use system's default handwriting</h5> 
-                        <div class="container">
-                                    {{ form.as_p }}  
-                                    <button type="submit" class="save btn btn-default">Upload</button>  
-                        </div>
+                <div class="container">
+                    <h5>Use system's default handwriting</h5>
+                    <div class="container">
+                        {{ form.as_p }}
+                        <button type="submit" class="save btn btn-default">Upload</button>
+                    </div>
                 </div>
-            </form> 
-        </div> 
+            </form>
+        </div>
+    </section>
+    <section style="margin: 40px ;background-color:cornsilk; background-size:contain;padding: 20px;">
         <div>
             <br>
             <br>
             <div class="container">
-                <h5>convert data to your own handwriting  </h5><br>
-                    <div class="container">
-                        <input class="btn btn-success" type="button" value="click here" onclick="location.href='{% url 'converter:check_data_exist' %}'"  />
-                    </div>
+                <h5>Convert data to your own handwriting </h5><br>
+                <div class="container">
+                    <input class="btn btn-success" type="button" value="click here"
+                        onclick="location.href='{% url 'converter:check_data_exist' %}'" />
+                </div>
             </div>
         </div>
-    </div>
-{% endblock content %}
+    </section>
+</div>
 
+{% endblock content %}

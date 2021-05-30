@@ -8,5 +8,5 @@ class Uploadform(forms.Form):
 class ImageForm(forms.ModelForm):
     class Meta:
         model= Image
-        fields= ["imagefile1","imagefile2","imagefile3","imagefile4","imagefile5","imagefile6"]
+        fields= ["imagefile1","imagefile2","imagefile3","imagefile4","imagefile5"]
         exclude = ['user_name']
